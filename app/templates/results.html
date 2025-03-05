@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Results - AI Lost and Found System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Potential Matches</h1>
+            <a href="{{ url_for('index') }}" class="back-link">← Back to Home</a>
+        </header>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <main>
+            <div class="results-container">
+                {% if matches %}
+                    <h2>We Found {{ matches|length }} Potential Match{{ 'es' if matches|length != 1 else '' }}</h2>
+                    
+                    {% for match in matches %}
+                        <div class="match-card">
+                            <div class="match-header">
+                                <h3>Match #{{ loop.index }}</h3>
+                                <div class="confidence-badge" 
+                                     data-confidence="{{ (match.confidence * 100)|int }}">
+                                    {{ (match.confidence * 100)|int }}% Match
+                                </div>
+                                {% if match.is_verified %}
+                                    <div class="verified-badge">Verified</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="match-content">
+                                <div class="item-comparison">
+                                    <div class="item lost-item">
+                                        <h4>Lost Item</h4>
+                                        <div class="item-image">
+                                            <img src="{{ url_for('static', filename=match.lost_item.image_path.replace('static/', '')) }}" alt="Lost item image">
+                                        </div>
+                                        <div class="item-details">
+                                            <p><strong>Name:</strong> {{ match.lost_item.name }}</p>
+                                            <p><strong>Category:</strong> {{ match.lost_item.category }}</p>
+                                            <p><strong>Description:</strong> {{ match.lost_item.description }}</p>
+                                            <p><strong>Location:</strong> {{ match.lost_item.location }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="item found-item">
+                                        <h4>Found Item</h4>
+                                        <div class="item-image">
+                                            <img src="{{ url_for('static', filename=match.found_item.image_path.replace('static/', '')) }}" alt="Found item image">
+                                        </div>
+                                        <div class="item-details">
+                                            <p><strong>Name:</strong> {{ match.found_item.name }}</p>
+                                            <p><strong>Category:</strong> {{ match.found_item.category }}</p>
+                                            <p><strong>Description:</strong> {{ match.found_item.description }}</p>
+                                            <p><strong>Location:</strong> {{ match.found_item.location }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {% if not match.is_verified %}
+                                    <div class="match-actions">
+                                        <form action="{{ url_for('verify_match', match_id=match.id) }}" method="POST">
+                                            <button type="submit" class="btn btn-success">Verify Match</button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <div class="match-notification">
+                                        <p>Both parties have been notified about this match.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-results">
+                        <h2>No Matches Found</h2>
+                        <p>We couldn't find any potential matches at this time. Check back later or submit a new item.</p>
+                        <div class="action-links">
+                            <a href="{{ url_for('lost_item') }}" class="btn">Report Lost Item</a>
+                            <a href="{{ url_for('found_item') }}" class="btn">Report Found Item</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI Lost and Found System</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>

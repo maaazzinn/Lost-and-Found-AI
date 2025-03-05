@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Lost and Found System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI-Powered Lost and Found System</h1>
+            <p>Reconnect with your lost items using AI</p>
+        </header>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <main>
+            <div class="card-container">
+                <div class="card">
+                    <h2>Lost an Item?</h2>
+                    <p>Report your lost item and our AI will help find matches.</p>
+                    <a href="{{ url_for('lost_item') }}" class="btn">Report Lost Item</a>
+                </div>
+                
+                <div class="card">
+                    <h2>Found an Item?</h2>
+                    <p>Report a found item to help it find its way back home.</p>
+                    <a href="{{ url_for('found_item') }}" class="btn">Report Found Item</a>
+                </div>
+                
+                <div class="card">
+                    <h2>Check Matches</h2>
+                    <p>View potential matches between lost and found items.</p>
+                    <a href="{{ url_for('results') }}" class="btn">View Matches</a>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h2>How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <p>Submit a detailed description and photo of your lost or found item</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <p>Our AI analyzes images and descriptions to find potential matches</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <p>Get notified when a match is found and connect with the other party</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI Lost and Found System</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

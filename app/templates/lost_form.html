@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Lost Item - AI Lost and Found System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Report a Lost Item</h1>
+            <a href="{{ url_for('index') }}" class="back-link">← Back to Home</a>
+        </header>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <div class="message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <main>
+            <div class="form-container">
+                <form action="{{ url_for('lost_item') }}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="name">Item Name:</label>
+                        <input type="text" id="name" name="name" required placeholder="e.g., Blue Backpack">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Documents">Documents</option>
+                            <option value="Keys">Keys</option>
+                            <option value="Bags">Bags</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" required placeholder="Provide as much detail as possible about your item (color, brand, distinctive features, etc.)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Last Seen Location:</label>
+                        <input type="text" id="location" name="location" required placeholder="e.g., Library, 2nd floor">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact_info">Contact Email:</label>
+                        <input type="email" id="contact_info" name="contact_info" required placeholder="your.email@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="image">Upload Image:</label>
+                        <input type="file" id="image" name="image" accept="image/*" required>
+                        <div class="image-preview-container">
+                            <img id="image-preview" src="#" alt="Preview" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Submit Lost Item</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 AI Lost and Found System</p>
+        </footer>
+    </div>
+
+    <script>
+        // Image preview
+        document.getElementById('image').addEventListener('change', function(e) {
+            const imagePreview = document.getElementById('image-preview');
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
